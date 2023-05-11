@@ -1,7 +1,7 @@
 package com.example.cathay_bank_hw.model
 
 data class AttractionResponse(
-    val `data`: List<Data?>?=null,
+    val `data`: List<Data>?=null,
     val total: Int?=null
 ) {
     data class Data(

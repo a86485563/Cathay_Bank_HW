@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -41,6 +42,7 @@ class AttractionDetailFragment : Fragment() {
         nameTextView = view.findViewById(R.id.detail_name_textView)
         contentTextView = view.findViewById(R.id.detail_content_textView)
         linkTextView = view.findViewById(R.id.detail_url_textView)
+
         return view
     }
 
@@ -52,6 +54,11 @@ class AttractionDetailFragment : Fragment() {
         nameTextView.text = name
         contentTextView.text = content
         linkTextView.text = linkUrl
+        linkTextView.setOnClickListener{
+            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.navHost, WebviewFragment.newInstance(linkUrl))
+            transaction.commit()
+        }
 
     }
 
@@ -60,6 +67,10 @@ class AttractionDetailFragment : Fragment() {
         name = args.name
         content = args.content
         linkUrl = args.linkUrl
+    }
+
+    fun changeFragment(){
+
     }
 
 }

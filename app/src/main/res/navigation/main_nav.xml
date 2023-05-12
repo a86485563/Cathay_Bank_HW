@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/attractionListFragment"
         android:name="com.example.cathay_bank_hw.ui.fragment.AttractionListFragment"
-        android:label="fragment_attraction_list"
+        android:label="Taipei Tour"
         tools:layout="@layout/fragment_attraction_list" >
         <action
             android:id="@+id/action_attractionListFragment_to_attractionDetailFragment"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/attractionDetailFragment"
         android:name="com.example.cathay_bank_hw.ui.fragment.AttractionDetailFragment"
-        android:label="fragment_attraction_detail"
+        android:label="Detail Page"
         tools:layout="@layout/fragment_attraction_detail" >
         <argument
             android:name="image_url"
@@ -35,5 +35,17 @@
             android:name="link_url"
             app:argType="string"
             />
+        <action
+            android:id="@+id/action_attractionDetailFragment_to_webviewNavFragment"
+            app:destination="@id/webviewNavFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webviewNavFragment"
+        android:name="com.example.cathay_bank_hw.ui.fragment.WebviewNavFragment"
+        android:label="fragment_webview_nav"
+        tools:layout="@layout/fragment_webview_nav" >
+        <argument
+            android:name="url"
+            app:argType="string" />
     </fragment>
 </navigation>

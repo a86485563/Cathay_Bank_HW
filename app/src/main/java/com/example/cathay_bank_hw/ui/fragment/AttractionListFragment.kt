@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cathay_bank_hw.R
 import com.example.cathay_bank_hw.ui.adapter.MainAdapter
+import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle
 import com.example.cathay_bank_hw.viewmodel.AttractionListViewModel
 
 
@@ -39,6 +41,12 @@ class AttractionListFragment : Fragment() {
         initializeRecyclerView()
         initializeObservers()
         return view
+    }
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setActionBarTitle("台北旅遊")
     }
 
     private fun initializeRecyclerView() {

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="card_background_grey">#F5F5F5</color>
     <color name="hyper_link_blue">#00F0F0 </color>
+    <color name="action_bar_color">#FFEBCD</color>
 </resources>

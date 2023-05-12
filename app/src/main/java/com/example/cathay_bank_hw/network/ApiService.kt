@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 interface ApiService {
     companion object {
-        val BASE_URL: String = "https://www.travel.taipei/"
+        const val BASE_URL: String = "https://www.travel.taipei/"
     }
 
     @Headers("accept: application/json")

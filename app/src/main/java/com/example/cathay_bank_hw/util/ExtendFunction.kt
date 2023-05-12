@@ -7,6 +7,5 @@ object ExtendFunction {
     fun Fragment.setActionBarTitle( title : String ){
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.title = title
-
     }
 }

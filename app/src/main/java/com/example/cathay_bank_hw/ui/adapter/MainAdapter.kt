@@ -26,7 +26,9 @@ class MainAdapter(val clickAction : (item : AttractionResponse.Data?)->Unit) : R
 
         fun bind(attraction: AttractionResponse.Data){
             //綁定當地變數與dataModel中的每個值
-            Glide.with(itemView).load(attraction.images?.get(0)?.src).into(image)
+            if(attraction?.images?.isNotEmpty() == true){
+                Glide.with(itemView).load(attraction.images?.get(0)?.src).into(image)
+            }
             name.text = attraction.name
             content.text = attraction.introduction
 

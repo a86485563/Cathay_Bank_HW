@@ -27,3 +27,5 @@
 2. 防止api卡畫面
 3. loading 動畫
 4. fragment 換頁動畫
+
+### [影片連結](https://youtube.com/shorts/-vqouV_LqFQ)

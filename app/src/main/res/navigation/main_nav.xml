@@ -47,5 +47,8 @@
         <argument
             android:name="url"
             app:argType="string" />
+        <argument
+            android:name="actionBarTitle"
+            app:argType="string" />
     </fragment>
 </navigation>

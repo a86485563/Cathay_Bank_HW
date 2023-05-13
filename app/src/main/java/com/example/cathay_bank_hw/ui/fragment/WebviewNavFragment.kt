@@ -10,10 +10,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.navArgs
 import com.example.cathay_bank_hw.R
+import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle
 
 class WebviewNavFragment : Fragment() {
     private val args : WebviewNavFragmentArgs by navArgs()
     private var linkUrl = ""
+    private var actionBarTitle = ""
     private lateinit var webview : WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +43,14 @@ class WebviewNavFragment : Fragment() {
         }
         //get Args
         linkUrl = args.url
+        actionBarTitle = args.actionBarTitle
 
         webview.loadUrl(linkUrl)
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setActionBarTitle(actionBarTitle)
+    }
 }

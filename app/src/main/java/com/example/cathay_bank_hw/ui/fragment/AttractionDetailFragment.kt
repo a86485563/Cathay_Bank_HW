@@ -60,7 +60,8 @@ class AttractionDetailFragment : Fragment() {
 //            transaction.replace(R.id.navHost, WebviewFragment.newInstance(linkUrl))
 //            transaction.commit()
             val direction = AttractionDetailFragmentDirections.actionAttractionDetailFragmentToWebviewNavFragment(
-                linkUrl
+                linkUrl,
+                name
             )
             findNavController().navigate(direction)
         }

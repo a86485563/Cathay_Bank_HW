@@ -1,6 +1,7 @@
 package com.example.cathay_bank_hw.ui.fragment
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import com.example.cathay_bank_hw.ui.MainActivity
 import com.example.cathay_bank_hw.ui.adapter.MainAdapter
 import com.example.cathay_bank_hw.util.Dialog
 import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle
+import com.example.cathay_bank_hw.util.LocaleHelper
 import com.example.cathay_bank_hw.viewmodel.AttractionListViewModel
 
 
@@ -22,8 +24,9 @@ class AttractionListFragment : Fragment() {
     private lateinit var attractionListViewModel : AttractionListViewModel
     private lateinit var mAdapter : MainAdapter
     private lateinit var recyclerView: RecyclerView
-    private val langs = arrayOf("en","zh-tw","ja")
+    private val langs = arrayOf("en","zh-tw","ja","ko","th")
     val IMAGE_DEFAULT_URL = "https://data.taipei/img/department.2fd5d7eb.png"
+    private var currentLang = "zh-tw"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +55,7 @@ class AttractionListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setActionBarTitle("台北旅遊")
+        setActionBarTitle(LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.app_title_list_fragment))
     }
 
     private fun initializeRecyclerView() {
@@ -83,20 +86,41 @@ class AttractionListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.item_lang -> {
-                val test = "1234"
                 //開啟dialog
-                Dialog.createDialog(this.requireActivity() as MainActivity ,langs){
-                    Toast.makeText(this.requireActivity() as MainActivity, langs[it], Toast.LENGTH_LONG).show()
-                    attractionListViewModel.getData(lang = langs[it], page = "1",true)?.observe(requireActivity()){
+                Dialog.createDialog(this.requireActivity() as MainActivity ,langs){ index ->
+                    Toast.makeText(this.requireActivity() as MainActivity, langs[index], Toast.LENGTH_LONG).show()
+                    attractionListViewModel.getData(lang = langs[index], page = "1",true)?.observe(requireActivity()){
                         if(it != null){
-                            mAdapter.setData(it?.data!!)
+                            mAdapter.setData(it.data!!)
                         }
                     }
+                    //切換語系。
+
+                    if(currentLang != langs[index]){
+                        val langFileName = getResourcesName(langs[index])
+                        val context = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
+                        setActionBarTitle(context.resources.getString(R.string.app_title_list_fragment))
+                    }
+                    currentLang = langs[index]
+
                 }
+
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun getResourcesName(lang : String) : String{
+        return when(lang){
+            "en" -> "en"
+            "zh-tw" -> "zh-rTW"
+            "ja" -> "ja"
+            "ko" -> "ko"
+            "th" -> "th"
+            else -> "en"
+        }
+
     }
 
 }

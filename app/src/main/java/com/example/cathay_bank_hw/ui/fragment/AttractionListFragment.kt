@@ -37,13 +37,7 @@ class AttractionListFragment : Fragment() {
     private var currentLang = "zh-tw"
 
 
-    private val subActionList : List<SubActionModel> = listOf(SubActionModel(R.drawable.ic_attraction,"Attraction"),
-        SubActionModel(R.drawable.ic_calendar,"Calendar"),
-        SubActionModel(R.drawable.ic_hotel,"Accommodation"),
-        SubActionModel(R.drawable.ic_campaign,"Campaign"),
-        SubActionModel(R.drawable.ic_traffic,"traffic")
-    )
-
+    private lateinit var subActionList : List<SubActionModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +80,13 @@ class AttractionListFragment : Fragment() {
     }
 
     private fun initSubActionRecyclerView(){
+        subActionList = listOf(SubActionModel(R.drawable.ic_attraction,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_attraction)),
+            SubActionModel(R.drawable.ic_calendar,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_calendar)),
+            SubActionModel(R.drawable.ic_hotel,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_accom)),
+            SubActionModel(R.drawable.ic_campaign,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_campaign)),
+            SubActionModel(R.drawable.ic_traffic,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_traffic))
+        )
+
         subActionAdapter = SubActionAdapter().apply {
             setData(subActionList)
         }
@@ -128,7 +129,7 @@ class AttractionListFragment : Fragment() {
         when(item.itemId){
             R.id.item_lang -> {
                 //開啟dialog
-                Dialog.createDialog(this.requireActivity() as MainActivity ,langs){ index ->
+                Dialog.createDialog(LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.language_setting),this.requireActivity() as MainActivity ,langs){ index ->
                     Toast.makeText(this.requireActivity() as MainActivity, langs[index], Toast.LENGTH_LONG).show()
                     attractionListViewModel.getData(lang = langs[index], page = "1",true)?.observe(requireActivity()){
                         if(it != null){
@@ -141,6 +142,14 @@ class AttractionListFragment : Fragment() {
                         val langFileName = getResourcesName(langs[index])
                         val context = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
                         setActionBarTitle(context.resources.getString(R.string.app_title_list_fragment))
+                        //subAction
+                        subActionList = listOf(SubActionModel(R.drawable.ic_attraction,context.resources.getString(R.string.sub_action_attraction)),
+                            SubActionModel(R.drawable.ic_calendar,context.resources.getString(R.string.sub_action_calendar)),
+                            SubActionModel(R.drawable.ic_hotel,context.resources.getString(R.string.sub_action_accom)),
+                            SubActionModel(R.drawable.ic_campaign,context.resources.getString(R.string.sub_action_campaign)),
+                            SubActionModel(R.drawable.ic_traffic,context.resources.getString(R.string.sub_action_traffic))
+                        )
+                        subActionAdapter.setData(subActionList)
                     }
                     currentLang = langs[index]
 

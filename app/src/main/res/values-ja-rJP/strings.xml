@@ -2,4 +2,11 @@
     <string name="app_name">キャセイパシフィック</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="app_title_list_fragment">"台北かんこう"</string>
+
+    <string name="sub_action_attraction">"観光名所"</string>
+    <string name="sub_action_calendar">"開催日"</string>
+    <string name="sub_action_accom">"宿泊施設の"</string>
+    <string name="sub_action_campaign">"祭り"</string>
+    <string name="sub_action_traffic">"交通情報"</string>
+    <string name="language_setting">"言語設定"</string>
 </resources>

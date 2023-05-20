@@ -2,4 +2,10 @@
     <string name="app_name">ＨＷ</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="app_title_list_fragment">"เที่ยวไทเป"</string>
+    <string name="sub_action_attraction">"สถานที่ท่องเที่ยว"</string>
+    <string name="sub_action_calendar">"วันที่จัดงาน"</string>
+    <string name="sub_action_accom">"ข้อมูลที่พัก"</string>
+    <string name="sub_action_campaign">"ข้อมูลกิจกรรม"</string>
+    <string name="sub_action_traffic">"ข้อมูลการจราจร"</string>
+    <string name="language_setting">"ตั้งค่าภาษา"</string>
 </resources>

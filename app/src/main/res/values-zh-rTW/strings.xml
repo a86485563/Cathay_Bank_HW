@@ -2,4 +2,10 @@
     <string name="app_name">國泰作業</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="app_title_list_fragment">"台北旅遊"</string>
+    <string name="sub_action_attraction">"旅遊資訊"</string>
+    <string name="sub_action_calendar">"活動年曆"</string>
+    <string name="sub_action_accom">"住宿資訊"</string>
+    <string name="sub_action_campaign">"展演活動"</string>
+    <string name="sub_action_traffic">"交通資訊"</string>
+    <string name="language_setting">"語言設定"</string>
 </resources>

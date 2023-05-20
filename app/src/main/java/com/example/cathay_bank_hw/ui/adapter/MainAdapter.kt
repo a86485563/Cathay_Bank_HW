@@ -31,18 +31,9 @@ class MainAdapter(val clickAction : (item : AttractionResponse.Data?)->Unit) : R
         fun bind(attraction: AttractionResponse.Data){
             //綁定當地變數與dataModel中的每個值
             if(attraction?.images?.isNotEmpty() == true){
-//                Glide.with(this)
-//                    .load("url here") // image url
-//                    .placeholder(R.drawable.placeholder) // any placeholder to load at start
-//                    .error(R.drawable.imagenotfound)  // any image in case of error
-//                    .override(200, 200) // resizing
-//                    .centerCrop()
-//                    .into(imageView);
-//                val cookies = CookieManager.getDefault()
+
                 val path =  attraction.images?.get(0)?.src?:""
-//                val glideUrl = GlideUrl(path,LazyHeaders.Builder()
-//                    .addHeader("device-type","android")
-//                    .addHeader("Cookies",cookies.toString()).build())
+
                 GlideApp.with(itemView)
                     .asBitmap()
                     .load(path).placeholder(android.R.drawable.ic_menu_gallery)

@@ -2,4 +2,10 @@
     <string name="app_name">ＨＷ</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="app_title_list_fragment">"타이베이 여행"</string>
+    <string name="sub_action_attraction">"관광 명소"</string>
+    <string name="sub_action_calendar">"행사 날"</string>
+    <string name="sub_action_accom">"숙박 정보"</string>
+    <string name="sub_action_campaign">"활동 정보"</string>
+    <string name="sub_action_traffic">"교통 정보"</string>
+    <string name="language_setting">"언어 설정"</string>
 </resources>

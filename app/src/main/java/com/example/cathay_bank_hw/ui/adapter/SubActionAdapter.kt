@@ -15,6 +15,7 @@ import com.example.cathay_bank_hw.model.SubActionModel
 class SubActionAdapter: RecyclerView.Adapter<SubActionAdapter.SubViewHolder>()  {
     private var mList: List<SubActionModel>? = listOf()
     fun setData(list: List<SubActionModel>) {
+        if(!mList.isNullOrEmpty()) mList = listOf()
         mList = list
         notifyDataSetChanged()
     }

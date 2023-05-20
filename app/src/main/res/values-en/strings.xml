@@ -2,4 +2,10 @@
 <resources>
     <string name="app_name">Cathay_Bank_HW</string>
     <string name="app_title_list_fragment">"taipei tour"</string>
+    <string name="sub_action_attraction">"attraction"</string>
+    <string name="sub_action_calendar">"calendar"</string>
+    <string name="sub_action_accom">"accommodation"</string>
+    <string name="sub_action_campaign">"campaign"</string>
+    <string name="sub_action_traffic">"traffic"</string>
+    <string name="language_setting">"language_setting"</string>
 </resources>

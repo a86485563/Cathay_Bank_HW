@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_attraction_list" >
         <action
             android:id="@+id/action_attractionListFragment_to_attractionDetailFragment"
-            app:destination="@id/attractionDetailFragment" />
+            app:destination="@id/attractionDetailFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <fragment
         android:id="@+id/attractionDetailFragment"
@@ -37,7 +41,11 @@
             />
         <action
             android:id="@+id/action_attractionDetailFragment_to_webviewNavFragment"
-            app:destination="@id/webviewNavFragment" />
+            app:destination="@id/webviewNavFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/webviewNavFragment"

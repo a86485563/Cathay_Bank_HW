@@ -58,9 +58,7 @@ class AttractionDetailFragment : Fragment() {
         contentTextView.text = content
         linkTextView.text = linkUrl
         linkTextView.setOnClickListener{
-//            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-//            transaction.replace(R.id.navHost, WebviewFragment.newInstance(linkUrl))
-//            transaction.commit()
+
             val direction = AttractionDetailFragmentDirections.actionAttractionDetailFragmentToWebviewNavFragment(
                 linkUrl,
                 name

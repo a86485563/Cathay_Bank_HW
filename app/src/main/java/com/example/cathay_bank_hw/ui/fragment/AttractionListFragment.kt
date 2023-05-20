@@ -1,5 +1,7 @@
 package com.example.cathay_bank_hw.ui.fragment
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
@@ -19,6 +21,8 @@ import com.example.cathay_bank_hw.util.Dialog
 import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle
 import com.example.cathay_bank_hw.util.LocaleHelper
 import com.example.cathay_bank_hw.viewmodel.AttractionListViewModel
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 
 class AttractionListFragment : Fragment() {
@@ -31,6 +35,7 @@ class AttractionListFragment : Fragment() {
     private val langs = arrayOf("en","zh-tw","ja","ko","th")
     val IMAGE_DEFAULT_URL = "https://data.taipei/img/department.2fd5d7eb.png"
     private var currentLang = "zh-tw"
+
 
     private val subActionList : List<SubActionModel> = listOf(SubActionModel(R.drawable.ic_attraction,"Attraction"),
         SubActionModel(R.drawable.ic_calendar,"Calendar"),
@@ -61,7 +66,10 @@ class AttractionListFragment : Fragment() {
         attractionListViewModel = ViewModelProviders.of(this)[AttractionListViewModel::class.java]
         initializeMainRecyclerView()
         initSubActionRecyclerView()
-        initializeObservers()
+        MainScope().launch {
+            initializeObservers()
+        }
+
         return view
     }
 
@@ -155,5 +163,6 @@ class AttractionListFragment : Fragment() {
         }
 
     }
+
 
 }

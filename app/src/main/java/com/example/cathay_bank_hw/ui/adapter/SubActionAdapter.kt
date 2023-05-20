@@ -32,6 +32,9 @@ class SubActionAdapter: RecyclerView.Adapter<SubActionAdapter.SubViewHolder>()  
             Glide.with(itemView).load(item.image).into(image!!)
             title?.text = item.title
             image.setBackgroundResource(backgroundColor)
+            itemView.setOnClickListener{
+                item.clickAction.invoke()
+            }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubActionAdapter.SubViewHolder {

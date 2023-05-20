@@ -1,6 +1,7 @@
 package com.example.cathay_bank_hw.ui.fragment
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -80,12 +81,7 @@ class AttractionListFragment : Fragment() {
     }
 
     private fun initSubActionRecyclerView(){
-        subActionList = listOf(SubActionModel(R.drawable.ic_attraction,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_attraction)),
-            SubActionModel(R.drawable.ic_calendar,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_calendar)),
-            SubActionModel(R.drawable.ic_hotel,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_accom)),
-            SubActionModel(R.drawable.ic_campaign,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_campaign)),
-            SubActionModel(R.drawable.ic_traffic,LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.sub_action_traffic))
-        )
+        subActionList = createSubActionList(LocaleHelper.setLocale(requireContext() as MainActivity, "zh-tw"))
 
         subActionAdapter = SubActionAdapter().apply {
             setData(subActionList)
@@ -143,12 +139,7 @@ class AttractionListFragment : Fragment() {
                         val context = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
                         setActionBarTitle(context.resources.getString(R.string.app_title_list_fragment))
                         //subAction
-                        subActionList = listOf(SubActionModel(R.drawable.ic_attraction,context.resources.getString(R.string.sub_action_attraction)),
-                            SubActionModel(R.drawable.ic_calendar,context.resources.getString(R.string.sub_action_calendar)),
-                            SubActionModel(R.drawable.ic_hotel,context.resources.getString(R.string.sub_action_accom)),
-                            SubActionModel(R.drawable.ic_campaign,context.resources.getString(R.string.sub_action_campaign)),
-                            SubActionModel(R.drawable.ic_traffic,context.resources.getString(R.string.sub_action_traffic))
-                        )
+                        subActionList = createSubActionList(context)
                         subActionAdapter.setData(subActionList)
                     }
                     currentLang = langs[index]
@@ -159,6 +150,55 @@ class AttractionListFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun createSubActionList(context: Context) =
+        listOf(
+            SubActionModel(
+                R.drawable.ic_attraction,
+                context.resources.getString(R.string.sub_action_attraction)){
+                openWebView(
+                    context.resources.getString(R.string.sub_action_attraction),
+                    "https://www.travel.taipei/zh-tw/attraction/popular-area"
+                )
+            },
+            SubActionModel(
+                R.drawable.ic_calendar, context.resources.getString(R.string.sub_action_calendar)
+            ){
+                openWebView(
+                    context.resources.getString(R.string.sub_action_calendar),
+                    "https://www.travel.taipei/zh-tw/event-calendar/2023"
+                )
+            },
+            SubActionModel(
+                R.drawable.ic_hotel, context.resources.getString(R.string.sub_action_accom)
+            ){
+                openWebView(
+                    context.resources.getString(R.string.sub_action_accom),
+                    "https://taiwanstay.net.tw/legal-hotel-list?start=0&offset=50&search_keyword=&hoci_city=%E8%87%BA%E5%8C%97%E5%B8%82"
+                )
+            },
+            SubActionModel(
+                R.drawable.ic_campaign, context.resources.getString(R.string.sub_action_campaign)
+            ){
+                openWebView(
+                    context.resources.getString(R.string.sub_action_campaign),
+                    "https://www.travel.taipei/zh-tw/activity?page=1"
+                )
+            },
+            SubActionModel(
+                R.drawable.ic_traffic, context.resources.getString(R.string.sub_action_traffic)
+            ){
+                openWebView(
+                    context.resources.getString(R.string.sub_action_traffic),
+                    "https://www.travel.taipei/zh-tw/information/trafficlist"
+                )
+            }
+        )
+
+    private fun openWebView(title:String,url:String){
+        val direction = AttractionListFragmentDirections.actionAttractionListFragmentToWebviewNavFragment(url,title)
+        findNavController().navigate(direction)
     }
 
     private fun getResourcesName(lang : String) : String{

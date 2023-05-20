@@ -9,10 +9,10 @@
 - [x] mvvm
 - [x] toolbar 實作
 - [x] 多語系切換
-- [ ] Splash頁面
+- [x] Splash頁面
 - [ ] api 使用 coroutines 防止卡畫面
-- [ ] api loading 畫面
-- [ ] fragment 換頁動畫
+- [x] api loading 畫面
+- [x] fragment 換頁動畫
 ### REF
 - MVVM : https://github.com/fahadnasrullah109/Android-MVVM-with-Retrofit/tree/master
 

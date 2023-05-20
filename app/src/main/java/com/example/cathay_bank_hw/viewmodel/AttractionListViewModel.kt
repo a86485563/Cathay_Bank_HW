@@ -26,7 +26,6 @@ class AttractionListViewModel(private val app: Application) : AndroidViewModel(a
                 override fun onNetworkFailure(th: Throwable) {
                     mShowApiError.value = th.message
                 }
-
                 override fun onNetworkSuccess() {
                     mShowProgressBar.value = false
                 }

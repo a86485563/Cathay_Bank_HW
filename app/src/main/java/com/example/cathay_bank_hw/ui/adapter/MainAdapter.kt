@@ -7,8 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.example.cathay_bank_hw.R
 import com.example.cathay_bank_hw.model.AttractionResponse
+import com.example.cathay_bank_hw.util.GlideApp
+import java.net.CookieManager
 
 class MainAdapter(val clickAction : (item : AttractionResponse.Data?)->Unit) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
     private var mList: List<AttractionResponse.Data>? = listOf()
@@ -27,7 +31,24 @@ class MainAdapter(val clickAction : (item : AttractionResponse.Data?)->Unit) : R
         fun bind(attraction: AttractionResponse.Data){
             //綁定當地變數與dataModel中的每個值
             if(attraction?.images?.isNotEmpty() == true){
-                Glide.with(itemView).load(attraction.images?.get(0)?.src).into(image)
+//                Glide.with(this)
+//                    .load("url here") // image url
+//                    .placeholder(R.drawable.placeholder) // any placeholder to load at start
+//                    .error(R.drawable.imagenotfound)  // any image in case of error
+//                    .override(200, 200) // resizing
+//                    .centerCrop()
+//                    .into(imageView);
+//                val cookies = CookieManager.getDefault()
+                val path =  attraction.images?.get(0)?.src?:""
+//                val glideUrl = GlideUrl(path,LazyHeaders.Builder()
+//                    .addHeader("device-type","android")
+//                    .addHeader("Cookies",cookies.toString()).build())
+                GlideApp.with(itemView)
+                    .asBitmap()
+                    .load(path).placeholder(android.R.drawable.ic_menu_gallery)
+                    .override(200, 200) // resizing
+                    .centerCrop()
+                    .into(image)
             }
             name.text = attraction.name
             content.text = attraction.introduction

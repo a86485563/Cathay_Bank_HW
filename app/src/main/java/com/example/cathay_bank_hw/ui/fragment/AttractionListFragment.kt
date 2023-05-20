@@ -1,19 +1,20 @@
 package com.example.cathay_bank_hw.ui.fragment
 
-import android.content.Context
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cathay_bank_hw.R
+import com.example.cathay_bank_hw.model.SubActionModel
 import com.example.cathay_bank_hw.ui.MainActivity
 import com.example.cathay_bank_hw.ui.adapter.MainAdapter
+import com.example.cathay_bank_hw.ui.adapter.SubActionAdapter
 import com.example.cathay_bank_hw.util.Dialog
 import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle
 import com.example.cathay_bank_hw.util.LocaleHelper
@@ -23,14 +24,25 @@ import com.example.cathay_bank_hw.viewmodel.AttractionListViewModel
 class AttractionListFragment : Fragment() {
     private lateinit var attractionListViewModel : AttractionListViewModel
     private lateinit var mAdapter : MainAdapter
+    private lateinit var subActionAdapter : SubActionAdapter
+    private lateinit var subActionRecyclerView: RecyclerView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressbar : ProgressBar
     private val langs = arrayOf("en","zh-tw","ja","ko","th")
     val IMAGE_DEFAULT_URL = "https://data.taipei/img/department.2fd5d7eb.png"
     private var currentLang = "zh-tw"
 
+    private val subActionList : List<SubActionModel> = listOf(SubActionModel(R.drawable.ic_attraction,"Attraction"),
+        SubActionModel(R.drawable.ic_calendar,"Calendar"),
+        SubActionModel(R.drawable.ic_hotel,"Accommodation"),
+        SubActionModel(R.drawable.ic_campaign,"Campaign"),
+        SubActionModel(R.drawable.ic_traffic,"traffic")
+    )
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+        setHasOptionsMenu(true);
 
     }
 
@@ -45,11 +57,18 @@ class AttractionListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_attraction_list, container, false)
-        recyclerView =  view.findViewById(R.id.recycler_view)
+        findLayoutElement(view)
         attractionListViewModel = ViewModelProviders.of(this)[AttractionListViewModel::class.java]
-        initializeRecyclerView()
+        initializeMainRecyclerView()
+        initSubActionRecyclerView()
         initializeObservers()
         return view
+    }
+
+    private fun findLayoutElement(view: View) {
+        recyclerView = view.findViewById(R.id.recycler_view)
+        progressbar = view.findViewById(R.id.progressBar)
+        subActionRecyclerView = view.findViewById(R.id.circle_action_recycler)
     }
 
 
@@ -58,7 +77,18 @@ class AttractionListFragment : Fragment() {
         setActionBarTitle(LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.app_title_list_fragment))
     }
 
-    private fun initializeRecyclerView() {
+    private fun initSubActionRecyclerView(){
+        subActionAdapter = SubActionAdapter().apply {
+            setData(subActionList)
+        }
+        subActionRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+            adapter = subActionAdapter
+        }
+
+    }
+
+    private fun initializeMainRecyclerView() {
         mAdapter = MainAdapter {
             var imageUrl : String = if (it?.images?.isNotEmpty() == true) it?.images?.get(0)?.src ?: IMAGE_DEFAULT_URL else IMAGE_DEFAULT_URL
             //開啟detail fragment
@@ -80,6 +110,9 @@ class AttractionListFragment : Fragment() {
             if(it != null){
                 mAdapter.setData(it?.data!!)
             }
+        }
+        attractionListViewModel.mShowProgressBar?.observe(requireActivity()){
+            progressbar.visibility = if(it) View.VISIBLE else View.GONE
         }
     }
 

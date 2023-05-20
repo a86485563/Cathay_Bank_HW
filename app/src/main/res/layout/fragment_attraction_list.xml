@@ -5,13 +5,37 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.AttractionListFragment">
+    tools:context=".ui.fragment.AttractionListFragment"
+    android:background="@color/background_color">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/circle_action_recycler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/sub_action_card_holder"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/main_holder_item" />
+        app:layout_constraintTop_toBottomOf="@+id/circle_action_recycler"
+        tools:listitem="@layout/main_holder_item"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.ProgressBar.Inverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

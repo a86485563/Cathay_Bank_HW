@@ -3,6 +3,7 @@ package com.example.cathay_bank_hw.ui.fragment
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -31,6 +32,7 @@ class AttractionDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
     }
 
@@ -76,7 +78,10 @@ class AttractionDetailFragment : Fragment() {
         linkUrl = args.linkUrl
     }
 
-    fun changeFragment(){
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val langIcon = menu.findItem(R.id.item_lang)
+        langIcon?.isVisible = false
+        super.onPrepareOptionsMenu(menu)
 
     }
 

@@ -10,7 +10,7 @@ object Dialog {
         val builder = AlertDialog.Builder(activity)
         //點旁邊取消
         builder.setCancelable(true)
-        builder.setTitle("IT鐵人賽")
+        builder.setTitle("language setting")
         builder.setItems(langs
         ) { _, index -> clickAction(index) }
         builder.create().show()

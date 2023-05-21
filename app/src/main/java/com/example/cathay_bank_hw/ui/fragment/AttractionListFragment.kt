@@ -3,19 +3,24 @@ package com.example.cathay_bank_hw.ui.fragment
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.gesture.GestureOverlayView.ORIENTATION_HORIZONTAL
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.cathay_bank_hw.R
+import com.example.cathay_bank_hw.model.CarouselCardModel
 import com.example.cathay_bank_hw.model.SubActionModel
 import com.example.cathay_bank_hw.ui.MainActivity
+import com.example.cathay_bank_hw.ui.adapter.CarouselCardAdapter
 import com.example.cathay_bank_hw.ui.adapter.MainAdapter
 import com.example.cathay_bank_hw.ui.adapter.SubActionAdapter
 import com.example.cathay_bank_hw.util.Dialog
@@ -35,6 +40,7 @@ class AttractionListFragment : Fragment() {
     private lateinit var progressbar : ProgressBar
     private lateinit var langFileName : String
     private lateinit var langContext: Context
+    private lateinit var viewPager2: ViewPager2
 
     private val langs = arrayOf("en","zh-tw","ja","ko","th")
     val IMAGE_DEFAULT_URL = "https://data.taipei/img/department.2fd5d7eb.png"
@@ -69,16 +75,90 @@ class AttractionListFragment : Fragment() {
         attractionListViewModel.getData( page = "1",true)
         initializeMainRecyclerView()
         initSubActionRecyclerView()
+        val cardList = listOf(
+            //加上最後一個
+            CarouselCardModel("https://www.travel.taipei/content/images/banner/373386/compressed_banner-image-agkpbptsjemio0oakxegrg.jpg"){
+                openWebView("","https://www.youtube.com/@taipeitravelofficial")
+            },
+
+            CarouselCardModel("https://www.travel.taipei/content/images/banner/178795/compressed_banner-image-1twnqnspwuwpbeob8dj4gq.jpg"){
+                                                                                                                                          openWebView("","https://www.travel.taipei/zh-tw/souvenir")
+            },
+            CarouselCardModel("https://www.travel.taipei/content/images/banner/224195/compressed_banner-image-6yzumrtw-egqonfakxr9qg.jpg"){
+                                                                                                                                          openWebView("","https://www.travel.taipei/immersive/#/intro")
+            },
+            CarouselCardModel("https://www.travel.taipei/content/images/banner/373335/compressed_banner-image-9chsu2mliuyo59a3z7p1cw.jpg"){
+                                                                                                                                          openWebView("","https://www.travel.taipei/zh-tw/news/details/46594")
+            },
+            CarouselCardModel("https://www.travel.taipei/content/images/banner/374257/compressed_banner-image-vtu09hzc8uubmzvnux3ahg.jpg"){
+                                                                                                                                          openWebView("","https://2023letsgotaipei.taipei/")
+            },
+            CarouselCardModel("https://www.travel.taipei/content/images/banner/373386/compressed_banner-image-agkpbptsjemio0oakxegrg.jpg"){
+                    openWebView("","https://www.youtube.com/@taipeitravelofficial")
+            },
+            //第一個
+            CarouselCardModel("https://www.travel.taipei/content/images/banner/178795/compressed_banner-image-1twnqnspwuwpbeob8dj4gq.jpg"){
+                openWebView("","https://www.travel.taipei/zh-tw/souvenir")
+            }
+        )
+
+        val cardAdapter = CarouselCardAdapter()
+        cardAdapter.setData(
+            cardList
+        )
+        initCarouselCard(cardAdapter, cardList)
+
         initializeObservers()
 
 
         return view
     }
 
+    private fun initCarouselCard(
+        cardAdapter: CarouselCardAdapter,
+        cardList: List<CarouselCardModel>
+    ) {
+        viewPager2.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            adapter = cardAdapter.apply {
+                val recyclerView = viewPager2.getChildAt(0) as RecyclerView
+                val totalItemCount = cardList.size
+                recyclerView.apply {
+                    addOnScrollListener(
+                        InfiniteScrollBehaviour(
+                            totalItemCount,
+                            layoutManager as LinearLayoutManager
+                        )
+                    )
+                }
+            }
+        }
+
+        val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin)
+        val offsetPx = resources.getDimensionPixelOffset(R.dimen.offset)
+        viewPager2.setPageTransformer { page, position ->
+            val viewPager = page.parent.parent as ViewPager2
+            val offset = position * -(2 * offsetPx + pageMarginPx)
+            if (viewPager.orientation == ORIENTATION_HORIZONTAL) {
+                if (ViewCompat.getLayoutDirection(viewPager) == ViewCompat.LAYOUT_DIRECTION_RTL) {
+                    page.translationX = -offset
+                } else {
+                    page.translationX = offset
+                }
+            } else {
+                page.translationY = offset
+            }
+        }
+        viewPager2.setCurrentItem(1, false)
+    }
+
     private fun findLayoutElement(view: View) {
         recyclerView = view.findViewById(R.id.recycler_view)
         progressbar = view.findViewById(R.id.progressBar)
         subActionRecyclerView = view.findViewById(R.id.circle_action_recycler)
+        viewPager2 = view.findViewById(R.id.carousel_viewPager)
     }
 
 
@@ -218,4 +298,22 @@ class AttractionListFragment : Fragment() {
     }
 
 
+}
+
+class InfiniteScrollBehaviour(
+    private val itemCount: Int,
+    private val layoutManager: LinearLayoutManager
+) : RecyclerView.OnScrollListener() {
+
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+        val firstItemVisible = layoutManager.findFirstVisibleItemPosition()
+        val lastItemVisible = layoutManager.findLastVisibleItemPosition()
+
+        if (firstItemVisible == (itemCount - 1) && dx > 0) {
+            recyclerView.scrollToPosition(1)
+        } else if (lastItemVisible == 0 && dx < 0) {
+            recyclerView.scrollToPosition(itemCount-2)
+        }
+    }
 }

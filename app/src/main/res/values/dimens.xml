@@ -3,4 +3,9 @@
     <dimen name="text_size_small">11sp</dimen>
     <dimen name="text_size_mid">14sp</dimen>
     <dimen name="text_size_large">18sp</dimen>
+
+    //viewpager
+    <dimen name="pageMargin">20dp</dimen>
+    <dimen name="offset">30dp</dimen>
+    <dimen name="pageMarginAndOffset">50dp</dimen>
 </resources>

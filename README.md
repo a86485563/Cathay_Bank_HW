@@ -32,4 +32,4 @@
 7. ignore https (retrofit、glide)
 
 
-### [影片連結](https://youtube.com/shorts/-vqouV_LqFQ)
+### [影片連結](https://youtu.be/Vis-iXopx9Y)

@@ -33,9 +33,12 @@ class AttractionListFragment : Fragment() {
     private lateinit var subActionRecyclerView: RecyclerView
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressbar : ProgressBar
+    private lateinit var langFileName : String
+    private lateinit var langContext: Context
+
     private val langs = arrayOf("en","zh-tw","ja","ko","th")
     val IMAGE_DEFAULT_URL = "https://data.taipei/img/department.2fd5d7eb.png"
-    private var currentLang = "zh-tw"
+
 
 
     private lateinit var subActionList : List<SubActionModel>
@@ -59,11 +62,12 @@ class AttractionListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_attraction_list, container, false)
         findLayoutElement(view)
         attractionListViewModel = ViewModelProviders.of(this)[AttractionListViewModel::class.java]
+        //call api
+        attractionListViewModel.getData( page = "1",true)
         initializeMainRecyclerView()
         initSubActionRecyclerView()
-        MainScope().launch {
-            initializeObservers()
-        }
+        initializeObservers()
+
 
         return view
     }
@@ -111,13 +115,24 @@ class AttractionListFragment : Fragment() {
         }
     }
     private fun initializeObservers() {
-        attractionListViewModel.getData(lang = "zh-tw", page = "1",true)?.observe(requireActivity()){
-            if(it != null){
-                mAdapter.setData(it?.data!!)
-            }
+        attractionListViewModel.attractionLiveData?.observe(requireActivity()){
+            mAdapter.setData(it?.data?: emptyList())
         }
         attractionListViewModel.mShowProgressBar?.observe(requireActivity()){
             progressbar.visibility = if(it) View.VISIBLE else View.GONE
+        }
+
+        attractionListViewModel.currentLang?.observe(requireActivity()){
+            //切換resource
+            langFileName = getResourcesName(it)
+            langContext = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
+            //設定title
+            setActionBarTitle(langContext?.resources.getString(R.string.app_title_list_fragment))
+            //切換subAction
+            subActionList = createSubActionList(langContext)
+            subActionAdapter.setData(subActionList)
+            //切換recyclerView
+            attractionListViewModel.getData( page = "1",true)
         }
     }
 
@@ -125,24 +140,10 @@ class AttractionListFragment : Fragment() {
         when(item.itemId){
             R.id.item_lang -> {
                 //開啟dialog
-                Dialog.createDialog(LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.language_setting),this.requireActivity() as MainActivity ,langs){ index ->
+                Dialog.createDialog(langContext.getString(R.string.language_setting),this.requireActivity() as MainActivity ,langs){ index ->
                     Toast.makeText(this.requireActivity() as MainActivity, langs[index], Toast.LENGTH_LONG).show()
-                    attractionListViewModel.getData(lang = langs[index], page = "1",true)?.observe(requireActivity()){
-                        if(it != null){
-                            mAdapter.setData(it.data!!)
-                        }
-                    }
                     //切換語系。
-
-                    if(currentLang != langs[index]){
-                        val langFileName = getResourcesName(langs[index])
-                        val context = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
-                        setActionBarTitle(context.resources.getString(R.string.app_title_list_fragment))
-                        //subAction
-                        subActionList = createSubActionList(context)
-                        subActionAdapter.setData(subActionList)
-                    }
-                    currentLang = langs[index]
+                    attractionListViewModel.setLang( langs[index] )
 
                 }
 

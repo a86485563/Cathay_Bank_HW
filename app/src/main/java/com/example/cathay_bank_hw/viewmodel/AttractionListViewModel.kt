@@ -12,17 +12,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AttractionListViewModel(private val app: Application) : AndroidViewModel(app) {
-    var attractionLiveData: MutableLiveData<AttractionResponse?>? = null
+    var attractionLiveData: MutableLiveData<AttractionResponse?>? = MutableLiveData()
     val mShowProgressBar = MutableLiveData(true)
     val mShowNetworkError: MutableLiveData<Boolean> = MutableLiveData()
     val mShowApiError = MutableLiveData<String>()
+    val currentLang = MutableLiveData<String>().apply {
+        postValue("zh-tw")
+    }
 
 
-    fun getData(lang : String?,page : String? ,forceFetch : Boolean): MutableLiveData<AttractionResponse?>? {
+    fun getData(page : String? ,forceFetch : Boolean){
 
         if (NetworkHelper.isOnline(app.baseContext)) {
             mShowProgressBar.value = true
-            attractionLiveData = AttractionsRepository.getAttractionResults(lang = lang,page = page,object : NetworkResponseCallback {
+            this.attractionLiveData = AttractionsRepository.getAttractionResults(lang = this.currentLang.value,page = page,object : NetworkResponseCallback {
                 override fun onNetworkFailure(th: Throwable) {
                     mShowApiError.value = th.message
                 }
@@ -30,9 +33,12 @@ class AttractionListViewModel(private val app: Application) : AndroidViewModel(a
                     mShowProgressBar.value = false
                 }
             }, forceFetch)
+
         } else {
             mShowNetworkError.value = true
         }
-        return attractionLiveData
+    }
+    fun setLang (lang: String?){
+        this.currentLang.postValue(lang?:"zh-tw")
     }
 }

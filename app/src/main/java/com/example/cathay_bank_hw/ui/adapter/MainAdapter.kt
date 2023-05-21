@@ -7,8 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.signature.ObjectKey
 import com.example.cathay_bank_hw.R
 import com.example.cathay_bank_hw.model.AttractionResponse
 import com.example.cathay_bank_hw.util.GlideApp
@@ -35,9 +37,13 @@ class MainAdapter(val clickAction : (item : AttractionResponse.Data?)->Unit) : R
                 val path =  attraction.images?.get(0)?.src?:""
 
                 GlideApp.with(itemView)
-                    .asBitmap()
-                    .load(path).placeholder(android.R.drawable.ic_menu_gallery)
-                    .override(200, 200) // resizing
+                    .load(path)
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .centerCrop()
+                    .into(image)
+            }else{
+                GlideApp.with(itemView)
+                    .load(android.R.drawable.ic_menu_gallery)
                     .centerCrop()
                     .into(image)
             }

@@ -62,6 +62,9 @@ class AttractionListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_attraction_list, container, false)
         findLayoutElement(view)
         attractionListViewModel = ViewModelProviders.of(this)[AttractionListViewModel::class.java]
+        //set lang context
+        langFileName = getResourcesName(attractionListViewModel.currentLang.value?:"zh-tw")
+        langContext = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
         //call api
         attractionListViewModel.getData( page = "1",true)
         initializeMainRecyclerView()
@@ -81,7 +84,7 @@ class AttractionListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setActionBarTitle(LocaleHelper.getDefaultRes(requireContext() as MainActivity).getString(R.string.app_title_list_fragment))
+        setActionBarTitle( langContext?.resources.getString(R.string.app_title_list_fragment))
     }
 
     private fun initSubActionRecyclerView(){

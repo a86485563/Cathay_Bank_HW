@@ -22,10 +22,14 @@
 - top app bar : https://developer.android.com/guide/navigation/navigation-ui
 - 多國語系： https://ithelp.ithome.com.tw/articles/10240330
 
-### 預計完成
-1. Splash頁面
-2. 防止api卡畫面
+### 完成
+1. circle loop carousel card
+2. Splash頁面
 3. loading 動畫
 4. fragment 換頁動畫
+5. MVVM
+6. dialog 調整語言（多國語系切換)
+7. ignore https (retrofit、glide)
+
 
 ### [影片連結](https://youtube.com/shorts/-vqouV_LqFQ)

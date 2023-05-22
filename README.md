@@ -24,7 +24,7 @@
 
 ### 完成
 1. circle loop carousel card
-2. Splash頁面
+2. Splash頁面(自製gif)
 3. loading 動畫
 4. fragment 換頁動畫
 5. MVVM

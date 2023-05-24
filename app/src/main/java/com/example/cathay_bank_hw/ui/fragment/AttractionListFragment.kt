@@ -1,18 +1,14 @@
 package com.example.cathay_bank_hw.ui.fragment
 
-import android.app.Activity.RESULT_OK
 import android.content.Context
-import android.content.Intent
 import android.gesture.GestureOverlayView.ORIENTATION_HORIZONTAL
 import android.os.Bundle
 import android.view.*
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.core.view.ViewCompat
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -27,20 +23,16 @@ import com.example.cathay_bank_hw.util.Dialog
 import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle
 import com.example.cathay_bank_hw.util.LocaleHelper
 import com.example.cathay_bank_hw.viewmodel.AttractionListViewModel
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.fragment_attraction_list.*
 
 
 class AttractionListFragment : Fragment() {
     private lateinit var attractionListViewModel : AttractionListViewModel
     private lateinit var mAdapter : MainAdapter
     private lateinit var subActionAdapter : SubActionAdapter
-    private lateinit var subActionRecyclerView: RecyclerView
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var progressbar : ProgressBar
+
     private lateinit var langFileName : String
     private lateinit var langContext: Context
-    private lateinit var viewPager2: ViewPager2
 
     private val langs = arrayOf("en","zh-tw","ja","ko","th")
     val IMAGE_DEFAULT_URL = "https://data.taipei/img/department.2fd5d7eb.png"
@@ -66,50 +58,11 @@ class AttractionListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_attraction_list, container, false)
-        findLayoutElement(view)
+//        findLayoutElement(view)
         attractionListViewModel = ViewModelProviders.of(this)[AttractionListViewModel::class.java]
         //set lang context
         langFileName = getResourcesName(attractionListViewModel.currentLang.value?:"zh-tw")
         langContext = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
-        //call api
-        attractionListViewModel.getData( page = "1",true)
-        initializeMainRecyclerView()
-        initSubActionRecyclerView()
-        val cardList = listOf(
-            //加上最後一個
-            CarouselCardModel("https://www.travel.taipei/content/images/banner/373386/compressed_banner-image-agkpbptsjemio0oakxegrg.jpg"){
-                openWebView("","https://www.youtube.com/@taipeitravelofficial")
-            },
-
-            CarouselCardModel("https://www.travel.taipei/content/images/banner/178795/compressed_banner-image-1twnqnspwuwpbeob8dj4gq.jpg"){
-                                                                                                                                          openWebView("","https://www.travel.taipei/zh-tw/souvenir")
-            },
-            CarouselCardModel("https://www.travel.taipei/content/images/banner/224195/compressed_banner-image-6yzumrtw-egqonfakxr9qg.jpg"){
-                                                                                                                                          openWebView("","https://www.travel.taipei/immersive/#/intro")
-            },
-            CarouselCardModel("https://www.travel.taipei/content/images/banner/373335/compressed_banner-image-9chsu2mliuyo59a3z7p1cw.jpg"){
-                                                                                                                                          openWebView("","https://www.travel.taipei/zh-tw/news/details/46594")
-            },
-            CarouselCardModel("https://www.travel.taipei/content/images/banner/374257/compressed_banner-image-vtu09hzc8uubmzvnux3ahg.jpg"){
-                                                                                                                                          openWebView("","https://2023letsgotaipei.taipei/")
-            },
-            CarouselCardModel("https://www.travel.taipei/content/images/banner/373386/compressed_banner-image-agkpbptsjemio0oakxegrg.jpg"){
-                    openWebView("","https://www.youtube.com/@taipeitravelofficial")
-            },
-            //第一個
-            CarouselCardModel("https://www.travel.taipei/content/images/banner/178795/compressed_banner-image-1twnqnspwuwpbeob8dj4gq.jpg"){
-                openWebView("","https://www.travel.taipei/zh-tw/souvenir")
-            }
-        )
-
-        val cardAdapter = CarouselCardAdapter()
-        cardAdapter.setData(
-            cardList
-        )
-        initCarouselCard(cardAdapter, cardList)
-
-        initializeObservers()
-
 
         return view
     }
@@ -118,12 +71,12 @@ class AttractionListFragment : Fragment() {
         cardAdapter: CarouselCardAdapter,
         cardList: List<CarouselCardModel>
     ) {
-        viewPager2.apply {
+        carousel_viewPager.apply {
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 3
             adapter = cardAdapter.apply {
-                val recyclerView = viewPager2.getChildAt(0) as RecyclerView
+                val recyclerView = carousel_viewPager.getChildAt(0) as RecyclerView
                 val totalItemCount = cardList.size
                 recyclerView.apply {
                     addOnScrollListener(
@@ -138,7 +91,7 @@ class AttractionListFragment : Fragment() {
 
         val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin)
         val offsetPx = resources.getDimensionPixelOffset(R.dimen.offset)
-        viewPager2.setPageTransformer { page, position ->
+        carousel_viewPager.setPageTransformer { page, position ->
             val viewPager = page.parent.parent as ViewPager2
             val offset = position * -(2 * offsetPx + pageMarginPx)
             if (viewPager.orientation == ORIENTATION_HORIZONTAL) {
@@ -151,20 +104,35 @@ class AttractionListFragment : Fragment() {
                 page.translationY = offset
             }
         }
-        viewPager2.setCurrentItem(1, false)
+        carousel_viewPager.setCurrentItem(1, false)
     }
 
-    private fun findLayoutElement(view: View) {
-        recyclerView = view.findViewById(R.id.recycler_view)
-        progressbar = view.findViewById(R.id.progressBar)
-        subActionRecyclerView = view.findViewById(R.id.circle_action_recycler)
-        viewPager2 = view.findViewById(R.id.carousel_viewPager)
-    }
+//    private fun findLayoutElement(view: View) {
+//        recyclerView = view.findViewById(R.id.recycler_view)
+//        progressbar = view.findViewById(R.id.progressBar)
+//        subActionRecyclerView = view.findViewById(R.id.circle_action_recycler)
+//        viewPager2 = view.findViewById(R.id.carousel_viewPager)
+//    }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setActionBarTitle( langContext?.resources.getString(R.string.app_title_list_fragment))
+        initializeMainRecyclerView()
+        initSubActionRecyclerView()
+        val cardAdapter = CarouselCardAdapter()
+        initCarouselCard(cardAdapter, attractionListViewModel.getCarouselData(this))
+        //call api
+        attractionListViewModel.getData( page = "1",true)
+        initializeObservers()
+
+
+
+        cardAdapter.setData(
+            attractionListViewModel.getCarouselData(this)
+        )
+
+
     }
 
     private fun initSubActionRecyclerView(){
@@ -173,7 +141,7 @@ class AttractionListFragment : Fragment() {
         subActionAdapter = SubActionAdapter().apply {
             setData(subActionList)
         }
-        subActionRecyclerView.apply {
+        circle_action_recycler.apply {
             layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
             adapter = subActionAdapter
         }
@@ -192,7 +160,7 @@ class AttractionListFragment : Fragment() {
             )
             findNavController().navigate(direction)
         }
-        recyclerView.apply {
+        recycler_view.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mAdapter
         }
@@ -202,7 +170,7 @@ class AttractionListFragment : Fragment() {
             mAdapter.setData(it?.data?: emptyList())
         }
         attractionListViewModel.mShowProgressBar?.observe(requireActivity()){
-            progressbar.visibility = if(it) View.VISIBLE else View.GONE
+            progressBar.visibility = if(it) View.VISIBLE else View.GONE
         }
 
         attractionListViewModel.currentLang?.observe(requireActivity()){
@@ -280,7 +248,7 @@ class AttractionListFragment : Fragment() {
             }
         )
 
-    private fun openWebView(title:String,url:String){
+    fun openWebView(title:String,url:String){
         val direction = AttractionListFragmentDirections.actionAttractionListFragmentToWebviewNavFragment(url,title)
         findNavController().navigate(direction)
     }
@@ -296,6 +264,8 @@ class AttractionListFragment : Fragment() {
         }
 
     }
+
+
 
 
 }

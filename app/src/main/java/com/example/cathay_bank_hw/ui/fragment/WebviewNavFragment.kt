@@ -35,10 +35,6 @@ class WebviewNavFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setActionBarTitle(actionBarTitle)
-    }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
@@ -67,6 +63,7 @@ class WebviewNavFragment : Fragment() {
         actionBarTitle = args.actionBarTitle
 
         nav_webview.loadUrl(linkUrl)
+        setActionBarTitle(actionBarTitle)
     }
 
 }

@@ -69,7 +69,7 @@ class AttractionListFragment : Fragment() {
 
     private fun initCarouselCard(
         cardAdapter: CarouselCardAdapter,
-        cardList: List<CarouselCardModel>
+        listSize: Int
     ) {
         carousel_viewPager.apply {
             clipToPadding = false
@@ -77,7 +77,7 @@ class AttractionListFragment : Fragment() {
             offscreenPageLimit = 3
             adapter = cardAdapter.apply {
                 val recyclerView = carousel_viewPager.getChildAt(0) as RecyclerView
-                val totalItemCount = cardList.size
+                val totalItemCount = listSize
                 recyclerView.apply {
                     addOnScrollListener(
                         InfiniteScrollBehaviour(
@@ -121,16 +121,15 @@ class AttractionListFragment : Fragment() {
         initializeMainRecyclerView()
         initSubActionRecyclerView()
         val cardAdapter = CarouselCardAdapter()
-        initCarouselCard(cardAdapter, attractionListViewModel.getCarouselData(this))
+        val carouselList = attractionListViewModel.getCarouselData(this)
+        cardAdapter.setData(
+            carouselList
+        )
+        initCarouselCard(cardAdapter, carouselList.size)
         //call api
         attractionListViewModel.getData( page = "1",true)
         initializeObservers()
 
-
-
-        cardAdapter.setData(
-            attractionListViewModel.getCarouselData(this)
-        )
 
 
     }

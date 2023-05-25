@@ -2,7 +2,6 @@ package com.example.cathay_bank_hw.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.example.cathay_bank_hw.model.AttractionResponse
-import com.example.cathay_bank_hw.model.GenericDataModel
 import com.example.cathay_bank_hw.network.ApiProvider
 import com.example.cathay_bank_hw.network.ApiService
 import com.example.cathay_bank_hw.network.NetworkResponseCallback

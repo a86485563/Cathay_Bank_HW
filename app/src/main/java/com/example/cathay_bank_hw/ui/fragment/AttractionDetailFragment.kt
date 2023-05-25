@@ -25,12 +25,6 @@ class AttractionDetailFragment : Fragment() {
     private var name = ""
     private var content = ""
     private var linkUrl = ""
-//
-//    private lateinit var mainImage: ImageView
-//    private lateinit var nameTextView: TextView
-//    private lateinit var contentTextView: TextView
-//    private lateinit var linkTextView: TextView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +38,6 @@ class AttractionDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_attraction_detail, container, false)
-//        mainImage = view.findViewById(R.id.detail_imageView)
-//        nameTextView = view.findViewById(R.id.detail_name_textView)
-//        contentTextView = view.findViewById(R.id.detail_content_textView)
-//        linkTextView = view.findViewById(R.id.detail_url_textView)
         return view
     }
 
@@ -59,21 +49,6 @@ class AttractionDetailFragment : Fragment() {
 
         setActionBarTitle(name)
 
-    }
-
-    override fun onPrimaryNavigationFragmentChanged(isPrimaryNavigationFragment: Boolean) {
-        super.onPrimaryNavigationFragmentChanged(isPrimaryNavigationFragment)
-        detail_name_textView.text = name
-        detail_content_textView.text = content
-        detail_url_textView.text = linkUrl
-        detail_url_textView.setOnClickListener{
-
-            val direction = AttractionDetailFragmentDirections.actionAttractionDetailFragmentToWebviewNavFragment(
-                linkUrl,
-                name
-            )
-            findNavController().navigate(direction)
-        }
     }
 
 
@@ -90,5 +65,22 @@ class AttractionDetailFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
 
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        detail_name_textView.text = name
+        detail_content_textView.text = content
+        detail_url_textView.text = linkUrl
+        detail_url_textView.setOnClickListener{
+
+            val direction = AttractionDetailFragmentDirections.actionAttractionDetailFragmentToWebviewNavFragment(
+                linkUrl,
+                name
+            )
+            findNavController().navigate(direction)
+        }
+    }
+
+
 
 }

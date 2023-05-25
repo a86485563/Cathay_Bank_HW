@@ -28,8 +28,7 @@ class AttractionListViewModel(private val app: Application) : AndroidViewModel(a
             //加上最後一個
             CarouselCardModel("https://www.travel.taipei/content/images/banner/373386/compressed_banner-image-agkpbptsjemio0oakxegrg.jpg"){
                 fragment.openWebView("","https://www.youtube.com/@taipeitravelofficial")
-            }
-            ,
+            },
 
             CarouselCardModel("https://www.travel.taipei/content/images/banner/178795/compressed_banner-image-1twnqnspwuwpbeob8dj4gq.jpg"){
                 fragment.openWebView("","https://www.travel.taipei/zh-tw/souvenir")

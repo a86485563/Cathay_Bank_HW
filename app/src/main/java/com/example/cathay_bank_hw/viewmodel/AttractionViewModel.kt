@@ -1,27 +1,39 @@
 package com.example.cathay_bank_hw.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.*
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.cathay_bank_hw.R
 import com.example.cathay_bank_hw.model.AttractionResponse
 import com.example.cathay_bank_hw.model.CarouselCardModel
-import com.example.cathay_bank_hw.network.NetworkHelper
-import com.example.cathay_bank_hw.network.NetworkResponseCallback
+import com.example.cathay_bank_hw.model.Resource
+import com.example.cathay_bank_hw.model.SubActionModel
+import com.example.cathay_bank_hw.repository.AttractionsRepo
 import com.example.cathay_bank_hw.repository.AttractionsRepository
-import com.example.cathay_bank_hw.ui.MainActivity
 import com.example.cathay_bank_hw.ui.fragment.AttractionListFragment
-import com.example.cathay_bank_hw.ui.fragment.AttractionListFragmentDirections
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class AttractionListViewModel(private val app: Application) : AndroidViewModel(app) {
-    var attractionLiveData: MutableLiveData<AttractionResponse?>? = MutableLiveData()
-    val mShowProgressBar = MutableLiveData(true)
-    val mShowNetworkError: MutableLiveData<Boolean> = MutableLiveData()
-    val mShowApiError = MutableLiveData<String>()
+class AttractionViewModel( ) : ViewModel() {
+    private val _attractionList = MutableLiveData<Resource<AttractionResponse>>()
+    val attractionList: LiveData<Resource<AttractionResponse>> = _attractionList
 
-    val currentLang = MutableLiveData<String>().apply {
+    private val _currentLang =  MutableLiveData<String>().apply {
         postValue("zh-tw")
     }
+
+    val currentLang : LiveData<String> = _currentLang
+
+    fun getList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _attractionList.postValue(Resource.Loading())
+            _attractionList.postValue(AttractionsRepo.getAttractionList(this@AttractionViewModel.currentLang.value))
+        }
+
+    }
+
 
     fun getCarouselData(fragment: AttractionListFragment) : List<CarouselCardModel>{
         return listOf(
@@ -52,26 +64,31 @@ class AttractionListViewModel(private val app: Application) : AndroidViewModel(a
         )
     }
 
-
-    fun getData(page : String? ,forceFetch : Boolean) {
-        if (NetworkHelper.isOnline(app.baseContext)) {
-            mShowProgressBar.value = true
-            attractionLiveData = AttractionsRepository.getAttractionResults(lang = this.currentLang.value,page = page,object : NetworkResponseCallback {
-                override fun onNetworkFailure(th: Throwable) {
-                    mShowApiError.value = th.message
-                }
-                override fun onNetworkSuccess() {
-                    mShowProgressBar.value = false
-                }
-            }, forceFetch)
-
-        } else {
-            mShowNetworkError.value = true
+    fun getSubActionList(context: Context, fragment: AttractionListFragment):List<SubActionModel>{
+        val urlList = AttractionsRepository.getSubList()
+        var subActionList  = mutableListOf<SubActionModel>()
+        val iconList = listOf<Int>(
+            R.drawable.ic_attraction,
+            R.drawable.ic_calendar,
+            R.drawable.ic_hotel,
+            R.drawable.ic_campaign,
+            R.drawable.ic_traffic
+        )
+        for( i in urlList.indices){
+            val title = context.resources.getString(R.string.sub_action_attraction)
+            val icon = iconList[i]
+            subActionList.add(SubActionModel(icon,title) {
+                fragment.openWebView(
+                    title,
+                    urlList[i]
+                )
+            })
         }
-    }
-    fun setLang (lang: String?){
-        this.currentLang.postValue(lang?:"zh-tw")
+        return  subActionList
     }
 
+    fun setLang (lang: String?){
+        this._currentLang.postValue(lang?:"zh-tw")
+    }
 
 }

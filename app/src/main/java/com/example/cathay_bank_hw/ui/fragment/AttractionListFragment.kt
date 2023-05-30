@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cathay_bank_hw.R
-import com.example.cathay_bank_hw.model.CarouselCardModel
+import com.example.cathay_bank_hw.model.Resource
 import com.example.cathay_bank_hw.model.SubActionModel
 import com.example.cathay_bank_hw.ui.MainActivity
 import com.example.cathay_bank_hw.ui.adapter.CarouselCardAdapter
@@ -22,14 +22,14 @@ import com.example.cathay_bank_hw.ui.adapter.SubActionAdapter
 import com.example.cathay_bank_hw.util.Dialog
 import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle
 import com.example.cathay_bank_hw.util.LocaleHelper
-import com.example.cathay_bank_hw.viewmodel.AttractionListViewModel
+import com.example.cathay_bank_hw.viewmodel.AttractionViewModel
 import kotlinx.android.synthetic.main.fragment_attraction_list.*
 
 
 class AttractionListFragment : Fragment() {
-    private lateinit var attractionListViewModel : AttractionListViewModel
     private lateinit var mAdapter : MainAdapter
     private lateinit var subActionAdapter : SubActionAdapter
+    private lateinit var attractionViewModel: AttractionViewModel
 
     private lateinit var langFileName : String
     private lateinit var langContext: Context
@@ -58,10 +58,11 @@ class AttractionListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_attraction_list, container, false)
-//        findLayoutElement(view)
-        attractionListViewModel = ViewModelProviders.of(this)[AttractionListViewModel::class.java]
+
+        attractionViewModel = ViewModelProviders.of(this)[AttractionViewModel::class.java]
+
         //set lang context
-        langFileName = getResourcesName(attractionListViewModel.currentLang.value?:"zh-tw")
+        langFileName = getResourcesName(attractionViewModel.currentLang.value?:"zh-tw")
         langContext = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
 
         return view
@@ -107,13 +108,6 @@ class AttractionListFragment : Fragment() {
         carousel_viewPager.setCurrentItem(1, false)
     }
 
-//    private fun findLayoutElement(view: View) {
-//        recyclerView = view.findViewById(R.id.recycler_view)
-//        progressbar = view.findViewById(R.id.progressBar)
-//        subActionRecyclerView = view.findViewById(R.id.circle_action_recycler)
-//        viewPager2 = view.findViewById(R.id.carousel_viewPager)
-//    }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -121,13 +115,15 @@ class AttractionListFragment : Fragment() {
         initializeMainRecyclerView()
         initSubActionRecyclerView()
         val cardAdapter = CarouselCardAdapter()
-        val carouselList = attractionListViewModel.getCarouselData(this)
+        val carouselList = attractionViewModel.getCarouselData(this)
         cardAdapter.setData(
             carouselList
         )
         initCarouselCard(cardAdapter, carouselList.size)
         //call api
-        attractionListViewModel.getData( page = "1",true)
+//        attractionListViewModel.getData( page = "1",true)
+        attractionViewModel.getList()
+
         initializeObservers()
 
 
@@ -135,7 +131,7 @@ class AttractionListFragment : Fragment() {
     }
 
     private fun initSubActionRecyclerView(){
-        subActionList = createSubActionList(LocaleHelper.setLocale(requireContext() as MainActivity, "zh-tw"))
+        subActionList = attractionViewModel.getSubActionList(LocaleHelper.setLocale(requireContext() as MainActivity, "zh-tw"),this)
 
         subActionAdapter = SubActionAdapter().apply {
             setData(subActionList)
@@ -165,24 +161,37 @@ class AttractionListFragment : Fragment() {
         }
     }
     private fun initializeObservers() {
-        attractionListViewModel.attractionLiveData?.observe(requireActivity()){
-            mAdapter.setData(it?.data?: emptyList())
-        }
-        attractionListViewModel.mShowProgressBar?.observe(requireActivity()){
-            progressBar.visibility = if(it) View.VISIBLE else View.GONE
-        }
 
-        attractionListViewModel.currentLang?.observe(requireActivity()){
+        attractionViewModel.currentLang?.observe(requireActivity()){
             //切換resource
             langFileName = getResourcesName(it)
             langContext = LocaleHelper.setLocale(requireContext() as MainActivity, langFileName)
             //設定title
             setActionBarTitle(langContext?.resources.getString(R.string.app_title_list_fragment))
             //切換subAction
-            subActionList = createSubActionList(langContext)
+            subActionList =  attractionViewModel.getSubActionList(LocaleHelper.setLocale(requireContext() as MainActivity, it),this)
             subActionAdapter.setData(subActionList)
             //切換recyclerView
-            attractionListViewModel.getData( page = "1",true)
+            attractionViewModel.getList()
+        }
+
+        attractionViewModel.attractionList.observe(requireActivity()){
+           when(it) {
+               is  Resource.Loading ->{
+                   progressBar.visibility = View.VISIBLE
+                   mAdapter.setData(emptyList())
+               }
+               is Resource.Success -> {
+                   progressBar.visibility = View.GONE
+                   mAdapter.setData(it?.data?.data ?: emptyList())
+               }
+               else ->{
+                   progressBar.visibility = View.GONE
+                   Toast.makeText(this.requireActivity() as MainActivity,"Oops Something Wrong",Toast.LENGTH_SHORT).show()
+                   mAdapter.setData(emptyList())
+               }
+           }
+
         }
     }
 
@@ -193,59 +202,16 @@ class AttractionListFragment : Fragment() {
                 Dialog.createDialog(langContext.getString(R.string.language_setting),this.requireActivity() as MainActivity ,langs){ index ->
                     Toast.makeText(this.requireActivity() as MainActivity, langs[index], Toast.LENGTH_LONG).show()
                     //切換語系。
-                    attractionListViewModel.setLang( langs[index] )
+                    attractionViewModel.setLang( langs[index] )
 
                 }
-
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun createSubActionList(context: Context) =
-        listOf(
-            SubActionModel(
-                R.drawable.ic_attraction,
-                context.resources.getString(R.string.sub_action_attraction)){
-                openWebView(
-                    context.resources.getString(R.string.sub_action_attraction),
-                    "https://www.travel.taipei/zh-tw/attraction/popular-area"
-                )
-            },
-            SubActionModel(
-                R.drawable.ic_calendar, context.resources.getString(R.string.sub_action_calendar)
-            ){
-                openWebView(
-                    context.resources.getString(R.string.sub_action_calendar),
-                    "https://www.travel.taipei/zh-tw/event-calendar/2023"
-                )
-            },
-            SubActionModel(
-                R.drawable.ic_hotel, context.resources.getString(R.string.sub_action_accom)
-            ){
-                openWebView(
-                    context.resources.getString(R.string.sub_action_accom),
-                    "https://taiwanstay.net.tw/legal-hotel-list?start=0&offset=50&search_keyword=&hoci_city=%E8%87%BA%E5%8C%97%E5%B8%82"
-                )
-            },
-            SubActionModel(
-                R.drawable.ic_campaign, context.resources.getString(R.string.sub_action_campaign)
-            ){
-                openWebView(
-                    context.resources.getString(R.string.sub_action_campaign),
-                    "https://www.travel.taipei/zh-tw/activity?page=1"
-                )
-            },
-            SubActionModel(
-                R.drawable.ic_traffic, context.resources.getString(R.string.sub_action_traffic)
-            ){
-                openWebView(
-                    context.resources.getString(R.string.sub_action_traffic),
-                    "https://www.travel.taipei/zh-tw/information/trafficlist"
-                )
-            }
-        )
+
 
     fun openWebView(title:String,url:String){
         val direction = AttractionListFragmentDirections.actionAttractionListFragmentToWebviewNavFragment(url,title)

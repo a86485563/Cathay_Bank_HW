@@ -1,19 +1,13 @@
 package com.example.cathay_bank_hw.ui.fragment
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cathay_bank_hw.R
 import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle

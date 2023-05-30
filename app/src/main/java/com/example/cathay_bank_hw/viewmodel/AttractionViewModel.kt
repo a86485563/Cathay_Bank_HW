@@ -6,19 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cathay_bank_hw.R
-import com.example.cathay_bank_hw.model.AttractionResponse
-import com.example.cathay_bank_hw.model.CarouselCardModel
-import com.example.cathay_bank_hw.model.Resource
-import com.example.cathay_bank_hw.model.SubActionModel
+import com.example.cathay_bank_hw.model.*
 import com.example.cathay_bank_hw.repository.AttractionsRepo
-import com.example.cathay_bank_hw.repository.AttractionsRepository
 import com.example.cathay_bank_hw.ui.fragment.AttractionListFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AttractionViewModel( ) : ViewModel() {
-    private val _attractionList = MutableLiveData<Resource<AttractionResponse>>()
-    val attractionList: LiveData<Resource<AttractionResponse>> = _attractionList
+    private val _attractionList = MutableLiveData<AttractionStatus<AttractionResponse>>()
+    val attractionList: LiveData<AttractionStatus<AttractionResponse>> = _attractionList
 
     private val _currentLang =  MutableLiveData<String>().apply {
         postValue("zh-tw")
@@ -28,8 +24,8 @@ class AttractionViewModel( ) : ViewModel() {
 
     fun getList() {
         viewModelScope.launch(Dispatchers.IO) {
-            _attractionList.postValue(Resource.Loading())
-            _attractionList.postValue(AttractionsRepo.getAttractionList(this@AttractionViewModel.currentLang.value))
+            _attractionList.postValue(AttractionStatus.Loading)
+            _attractionList.postValue(AttractionsRepo.getAttractionListStatus(this@AttractionViewModel.currentLang.value))
         }
 
     }
@@ -65,7 +61,7 @@ class AttractionViewModel( ) : ViewModel() {
     }
 
     fun getSubActionList(context: Context, fragment: AttractionListFragment):List<SubActionModel>{
-        val urlList = AttractionsRepository.getSubList()
+        val urlList = AttractionsRepo.getSubList()
         var subActionList  = mutableListOf<SubActionModel>()
         val iconList = listOf<Int>(
             R.drawable.ic_attraction,

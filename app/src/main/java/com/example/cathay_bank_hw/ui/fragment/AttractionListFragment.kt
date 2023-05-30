@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cathay_bank_hw.R
-import com.example.cathay_bank_hw.model.Resource
+import com.example.cathay_bank_hw.model.AttractionStatus
 import com.example.cathay_bank_hw.model.SubActionModel
 import com.example.cathay_bank_hw.ui.MainActivity
 import com.example.cathay_bank_hw.ui.adapter.CarouselCardAdapter
@@ -177,11 +177,11 @@ class AttractionListFragment : Fragment() {
 
         attractionViewModel.attractionList.observe(requireActivity()){
            when(it) {
-               is  Resource.Loading ->{
+               is  AttractionStatus.Loading ->{
                    progressBar.visibility = View.VISIBLE
                    mAdapter.setData(emptyList())
                }
-               is Resource.Success -> {
+               is AttractionStatus.Success -> {
                    progressBar.visibility = View.GONE
                    mAdapter.setData(it?.data?.data ?: emptyList())
                }

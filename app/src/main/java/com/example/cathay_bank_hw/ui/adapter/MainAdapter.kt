@@ -6,15 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
-import com.bumptech.glide.signature.ObjectKey
 import com.example.cathay_bank_hw.R
 import com.example.cathay_bank_hw.model.AttractionResponse
 import com.example.cathay_bank_hw.util.GlideApp
-import java.net.CookieManager
 
 class MainAdapter(val clickAction : (item : AttractionResponse.Data?)->Unit) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
     private var mList: List<AttractionResponse.Data>? = listOf()

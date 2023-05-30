@@ -1,15 +1,13 @@
 package com.example.cathay_bank_hw.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebSettings
-import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.cathay_bank_hw.R
 import com.example.cathay_bank_hw.util.ExtendFunction.setActionBarTitle

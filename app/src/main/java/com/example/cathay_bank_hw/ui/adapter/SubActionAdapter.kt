@@ -1,6 +1,5 @@
 package com.example.cathay_bank_hw.ui.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cathay_bank_hw.R
-import com.example.cathay_bank_hw.model.AttractionResponse
 import com.example.cathay_bank_hw.model.SubActionModel
 
 class SubActionAdapter: RecyclerView.Adapter<SubActionAdapter.SubViewHolder>()  {

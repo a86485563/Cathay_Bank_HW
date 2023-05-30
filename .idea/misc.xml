@@ -3,8 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/main_holder_item.xml" value="0.1" />
+        <entry key="../../../../layout/custom_preview.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/bg_gradient.xml" value="0.1375" />
+        <entry key="app/src/main/res/drawable/splash_background.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.172442626953125" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.10371376811594203" />
+        <entry key="app/src/main/res/layout/carousel_card_holder.xml" value="0.22263483977003778" />
+        <entry key="app/src/main/res/layout/fragment_attraction_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_attraction_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_webview.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_webview_nav.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/main_holder_item.xml" value="0.24557342529296866" />
+        <entry key="app/src/main/res/layout/sub_action_card_holder.xml" value="0.335" />
+        <entry key="app/src/main/res/menu/main.xml" value="0.375" />
       </map>
     </option>
   </component>
@@ -13,5 +24,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1" />
+      </ProjectState>
+    </option>
   </component>
 </project>
